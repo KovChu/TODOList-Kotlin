@@ -1,29 +1,39 @@
 package com.demo.kuanyi.todolist_kotlin
 
-import android.app.Activity
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
+import com.demo.kuanyi.todolist_kotlin.list.ToDoListFragment
+import com.demo.kuanyi.todolist_kotlin.widget.OnFabClickCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var mOnFabClick: OnFabClickCallback
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+        //initialize the DataHelper
+        Utils.initDataHelper(this)
 
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).show()
-//        }
-        var i = 3
-        fab.setOnClickListener { i ->
-            Log.i("Click", "i = " + i)
-            toast("hi")
+        fab.setOnClickListener { view ->
+            mOnFabClick.onFabClicked()
+        }
+
+        fragmentManager.beginTransaction()
+                .add(R.id.content, ToDoListFragment())
+                .commit()
+    }
+
+    override fun onBackPressed() {
+        if(fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
+        }else {
+            super.onBackPressed()
         }
     }
 
@@ -37,19 +47,16 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-
-        if (id == R.id.action_settings) {
-
-            return true
-        }
 
         return super.onOptionsItemSelected(item)
     }
 
-    fun Activity.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
-        Toast.makeText(this, message, duration).show()
+//    fun Activity.toast(message: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
+//        Toast.makeText(this, message, duration).show()
+//    }
+
+    fun setOnFabCallback(onFabClickCallback: OnFabClickCallback) {
+        mOnFabClick = onFabClickCallback
     }
 
 }

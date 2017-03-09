@@ -1,9 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.demo.kuanyi.todolist_kotlin.MainActivity" >
-    <item android:id="@+id/action_settings"
-        android:title="@string/action_settings"
-        android:orderInCategory="100"
-        app:showAsAction="never" />
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_filter"
+        android:icon="@drawable/uncheck"
+        android:title="@string/action_filter"
+        app:showAsAction="never"
+        android:orderInCategory="2"/>
+    <item android:id="@+id/action_mark_all_as_complete"
+        android:title="@string/action_mark_all_as_complete"
+        app:showAsAction="never"
+        android:orderInCategory="3"/>
+    <item android:id="@+id/action_mark_all_as_incomplete"
+        android:title="@string/action_mark_all_as_incomplete"
+        app:showAsAction="never"
+        android:orderInCategory="3"/>
+    <item android:id="@+id/action_remove_all"
+        android:title="@string/action_remove_all"
+        app:showAsAction="never"
+        android:orderInCategory="4"/>
 </menu>
