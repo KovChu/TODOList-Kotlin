@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TODOList-Kotlin</string>
 
-    <string name="add_item_hint">Press + on top right corner to add new item</string>
+    <string name="add_item_hint">Press + on bottom right corner to add new item</string>
 
     <string name="add_new_list_title">Create a new TODO list</string>
     <string name="add_new_list_description">Please enter the title of the list</string>

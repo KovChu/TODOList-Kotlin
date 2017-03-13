@@ -17,8 +17,9 @@ import java.sql.SQLException
  * Created by kuanyi on 15/5/14.
  */
 class DBHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DBHelper.DATABASE_NAME, null, DBHelper.DATABASE_VERSION) {
-    internal var listItemTable: Dao<ListItemTable, Int>? = null
-    internal var detailItemTable: Dao<DetailItemTable, Int>? = null
+    internal var listItemTable: Dao<ListItemTable, Int> = getDao<Dao<ListItemTable, Int>, ListItemTable>(ListItemTable::class.java)
+
+    internal var detailItemTable: Dao<DetailItemTable, Int> = getDao<Dao<DetailItemTable, Int>, DetailItemTable>(DetailItemTable::class.java)
 
     /**
      * What to do when your database needs to be created. Usually this entails creating the tables and loading any
@@ -62,23 +63,15 @@ class DBHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DBHelper.DAT
      * *
      * @param newVersion
      */
-    override fun onUpgrade(database: SQLiteDatabase, connectionSource: ConnectionSource, oldVersion: Int, newVersion: Int) {
+    override fun onUpgrade(database: SQLiteDatabase,
+                           connectionSource: ConnectionSource,
+                           oldVersion: Int, newVersion: Int) {
 
     }
 
 
     override fun close() {
         super.close()
-        listItemTable = null
-        detailItemTable = null
-    }
-
-    @Throws(SQLException::class)
-    fun getListItemTable(): Dao<ListItemTable, Int>? {
-        if (listItemTable == null) {
-            listItemTable = getDao<Dao<ListItemTable, Int>, ListItemTable>(ListItemTable::class.java)
-        }
-        return listItemTable
     }
 
     fun clearListItemTable() {
@@ -88,14 +81,6 @@ class DBHelper(context: Context) : OrmLiteSqliteOpenHelper(context, DBHelper.DAT
             e.printStackTrace()
         }
 
-    }
-
-    @Throws(SQLException::class)
-    fun getDetailItemTable(): Dao<DetailItemTable, Int>? {
-        if (detailItemTable == null) {
-            detailItemTable = getDao<Dao<DetailItemTable, Int>, DetailItemTable>(DetailItemTable::class.java)
-        }
-        return detailItemTable
     }
 
     fun clearDetailItemTable() {

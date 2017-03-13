@@ -21,14 +21,15 @@ class DetailItemTable {
 
     //the id of the list that the item belong to
     @DatabaseField
-    lateinit var listId: String
+    var listId: Int = 0
 
     //whether the task is complete or not
     @DatabaseField
     var isComplete: Boolean = false
 
-    constructor(title: String, listId: String, isComplete: Boolean) : this() {
+    constructor(title: String, listId: Int, isComplete: Boolean = false) : this() {
         this.title = title
+        this.listId = listId
         this.isComplete = isComplete
     }
 

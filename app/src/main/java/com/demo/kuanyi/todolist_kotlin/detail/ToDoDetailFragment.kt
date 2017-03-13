@@ -11,7 +11,9 @@ import com.demo.kuanyi.todolist_kotlin.AbstractToDoFragment
 import com.demo.kuanyi.todolist_kotlin.R
 import com.demo.kuanyi.todolist_kotlin.Utils
 import com.demo.kuanyi.todolist_kotlin.model.DetailItemTable
+import com.demo.kuanyi.todolist_kotlin.model.ListItemTable
 import com.demo.kuanyi.todolist_kotlin.widget.AdapterCallback
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_list.*
 import java.util.*
 
@@ -19,16 +21,17 @@ import java.util.*
  * The Detail List Fragment display the items of each todo list
  * Created by kuanyi on 2016/5/6.
  */
-class ToDoDetailFragment(listId : Int) : AbstractToDoFragment(), AdapterCallback {
+class ToDoDetailFragment(listItem : ListItemTable) : AbstractToDoFragment(), AdapterCallback {
+
 
     lateinit private var mItemAdapter: DetailAdapter
 
     private var isFilter = false
 
-    private var mListId = listId
+    private var mListItem = listItem
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup,
-                     savedInstanceState: Bundle): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                     savedInstanceState: Bundle?): View {
         val parentView = inflater.inflate(R.layout.fragment_list, container, false)
         return parentView
     }
@@ -39,7 +42,7 @@ class ToDoDetailFragment(listId : Int) : AbstractToDoFragment(), AdapterCallback
         recyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         recyclerview.adapter = mItemAdapter
         val runnable = Runnable {
-            var existingList: List<DetailItemTable>? = Utils.dataHelper.queryForAllDetailItems(mListId)
+            var existingList: List<DetailItemTable>? = Utils.dataHelper.queryForAllDetailItems(mListItem.id)
             if (existingList == null) {
                 existingList = ArrayList<DetailItemTable>()
             }
@@ -48,6 +51,7 @@ class ToDoDetailFragment(listId : Int) : AbstractToDoFragment(), AdapterCallback
             message.obj = existingList
             mHandler.dispatchMessage(message)
         }
+        activity.toolbar.title = mListItem.title
         Thread(runnable).start()
     }
 
@@ -130,20 +134,15 @@ class ToDoDetailFragment(listId : Int) : AbstractToDoFragment(), AdapterCallback
         alertDialog.setView(input)
         alertDialog.setPositiveButton("OK") { dialogInterface, i ->
             //create a new list item and display
-            val newDetailItemTable = DetailItemTable()
+            val newDetailItemTable = DetailItemTable(input.text.toString(), mListItem.id)
+
             newDetailItemTable.title = input.text.toString()
             Utils.dataHelper.createOrUpdateDetailItem(newDetailItemTable)
         }
         alertDialog.show()
     }
-
-    /**
-     * notify the callback that an item has been clicked
-
-     * @param itemId the id of the clicked item
-     */
-    override fun onListItemClicked(itemId: Int) {
-        //not implemented as it has been handled by adapter
+    override fun onListItemClicked(item: ListItemTable) {
+        //do not need to implement
     }
 
     // we need to display hint as a delay due to the remove item animation

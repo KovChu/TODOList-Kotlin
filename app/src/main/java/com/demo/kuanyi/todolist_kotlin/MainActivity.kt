@@ -25,13 +25,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         fragmentManager.beginTransaction()
-                .add(R.id.content, ToDoListFragment())
+                .replace(R.id.content, ToDoListFragment(), "TODO_LIST")
                 .commit()
     }
 
     override fun onBackPressed() {
         if(fragmentManager.backStackEntryCount > 0) {
             fragmentManager.popBackStack()
+            if(fragmentManager.backStackEntryCount == 1) {
+                toolbar.title = getString(R.string.app_name)
+            }
         }else {
             super.onBackPressed()
         }

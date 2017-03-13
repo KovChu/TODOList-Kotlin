@@ -1,5 +1,8 @@
 package com.demo.kuanyi.todolist_kotlin.widget
 
+import com.demo.kuanyi.todolist_kotlin.model.ListItemTable
+
+
 /**
  * This interface is used for communication between the fragment and the adapter
  * Created by kuanyi on 15/5/14.
@@ -16,5 +19,5 @@ interface AdapterCallback {
      * notify the callback that an item has been clicked
      * @param itemId the id of the clicked item
      */
-    fun onListItemClicked(itemId: Int)
+    fun onListItemClicked(item: ListItemTable)
 }

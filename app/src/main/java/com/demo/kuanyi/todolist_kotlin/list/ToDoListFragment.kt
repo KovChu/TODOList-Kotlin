@@ -1,6 +1,7 @@
 package com.demo.kuanyi.todolist_kotlin.list
 
 import android.app.AlertDialog
+import android.app.FragmentTransaction
 import android.os.Bundle
 import android.os.Message
 import android.support.v7.widget.LinearLayoutManager
@@ -139,12 +140,15 @@ class ToDoListFragment : AbstractToDoFragment(), AdapterCallback {
      * notify the callback that an item has been clicked
      * @param itemId the id of the clicked item
      */
-    override fun onListItemClicked(itemId: Int) {
+    override fun onListItemClicked(item: ListItemTable) {
 
         fragmentManager.beginTransaction()
-                .add(ToDoDetailFragment(itemId), "FRAGMENT_DETAIL")
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                .addToBackStack("TODO_DETAIL")
+                .replace(R.id.content, ToDoDetailFragment(item), "TODO_DETAIL")
                 .commit()
     }
+
 
     /**
      * called when FAB has been clicked

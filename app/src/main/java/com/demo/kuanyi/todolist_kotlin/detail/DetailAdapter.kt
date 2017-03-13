@@ -126,7 +126,8 @@ class DetailAdapter(fragment: Fragment) : RecyclerView.Adapter<ListViewHolder>()
             Utils.dataHelper.removeListItem(itemTable.id)
             true
         })
-
+        listViewHolder.checkImageView.visibility = View.VISIBLE
+        listViewHolder.sizeText.visibility = View.GONE
         if (itemTable.isComplete) {
             //when the item is complete, display the check and change the background color
             listViewHolder.textView.setBackgroundResource(R.color.complete)

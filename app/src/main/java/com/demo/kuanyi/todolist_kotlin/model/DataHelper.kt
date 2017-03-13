@@ -113,15 +113,25 @@ class DataHelper(context: Context) {
         return null
     }
 
+    fun queryForListItemSize(listId : Int): Int {
+        try {
+            return mDBHelper.detailItemTable.queryBuilder().where().eq("listId", listId).query().size
+        } catch (e: SQLException) {
+            e.printStackTrace()
+        }
+
+        return 0
+    }
+
     /**
      * query and return all the detail items that are corresponding to the item
      * @param itemId the id of the item
      * *
      * @return the list containing all the detail items
      */
-    fun queryForAllDetailItems(itemId: Int): List<DetailItemTable>? {
+    fun queryForAllDetailItems(listId: Int): List<DetailItemTable>? {
         try {
-            return mDBHelper.detailItemTable?.queryForEq("itemId", itemId)
+            return mDBHelper.detailItemTable.queryForEq("listId", listId)
         } catch (e: SQLException) {
             e.printStackTrace()
         }

@@ -110,7 +110,7 @@ class ListAdapter(fragment: Fragment) : RecyclerView.Adapter<ListViewHolder>() {
         listViewHolder.textView.text = itemTable.title
         listViewHolder.cardView.setOnClickListener({
             //when the item is clicked, pass the item's id to the callback
-            mAdapterCallback.onListItemClicked(itemTable.id)
+            mAdapterCallback.onListItemClicked(itemTable)
         })
         listViewHolder.cardView.setOnLongClickListener({
             //when the item is long-clicked, remove the item
@@ -119,15 +119,9 @@ class ListAdapter(fragment: Fragment) : RecyclerView.Adapter<ListViewHolder>() {
             true
         })
 
-        if (itemTable.isComplete) {
-            //when the item is complete, display the check and change the background color
-            listViewHolder.textView.setBackgroundResource(R.color.complete)
-            listViewHolder.checkImageView.visibility = View.VISIBLE
-        } else {
-            //when the item is not complete, hide the check and change back the background color
-            listViewHolder.textView.setBackgroundResource(R.color.transparent)
-            listViewHolder.checkImageView.visibility = View.GONE
-        }
+        listViewHolder.checkImageView.visibility = View.GONE
+        listViewHolder.sizeText.visibility = View.VISIBLE
+        listViewHolder.sizeText.text = Utils.dataHelper.queryForListItemSize(itemTable.id).toString()
     }
 
     override fun onViewRecycled(holder: ListViewHolder?) {
@@ -146,8 +140,6 @@ class ListAdapter(fragment: Fragment) : RecyclerView.Adapter<ListViewHolder>() {
     override fun getItemCount(): Int {
         return mDisplayingItemTableList.size
     }
-
-
 
     fun filterData(change: Boolean) {
         mDisplayingItemTableList = ArrayList<ListItemTable>()

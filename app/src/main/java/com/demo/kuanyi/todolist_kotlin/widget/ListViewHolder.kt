@@ -16,13 +16,14 @@ class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val cardView: CardView = itemView as CardView
     val textView: TextView
     val checkImageView: ImageView
+    val sizeText: TextView
 
     init {
         //set the shadow radius
         cardView.radius = itemView.resources.getDimension(R.dimen.card_radius)
-
         textView = cardView.findViewById(R.id.list_item_title_textview) as TextView
         checkImageView = cardView.findViewById(R.id.list_item_check_img) as ImageView
+        sizeText = cardView.findViewById(R.id.list_item_size) as TextView
 
     }
 }
