@@ -5,7 +5,11 @@ import android.app.FragmentTransaction
 import android.os.Bundle
 import android.os.Message
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import com.demo.kuanyi.todolist_kotlin.AbstractToDoFragment
@@ -23,8 +27,6 @@ import java.util.*
 class ToDoListFragment : AbstractToDoFragment(), AdapterCallback {
 
     lateinit private var mListAdapter: ListAdapter
-
-    private var isFilter = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -48,62 +50,6 @@ class ToDoListFragment : AbstractToDoFragment(), AdapterCallback {
             mHandler.dispatchMessage(message)
         }
         Thread(runnable).start()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        when (id) {
-            R.id.action_mark_all_as_complete -> {
-                //notify the adapter to mark all data as complete
-                mListAdapter.markAllAsComplete(true)
-                return true
-            }
-            R.id.action_mark_all_as_incomplete -> {
-                //notify the adapter to mark all data as incomplete
-                mListAdapter.markAllAsComplete(false)
-                return true
-            }
-            R.id.action_remove_all -> {
-
-                val removeAllAlertDialog = AlertDialog.Builder(activity)
-                removeAllAlertDialog.setTitle(getString(R.string.add_new_list_title))
-                removeAllAlertDialog.setMessage(getString(R.string.add_new_list_description))
-                removeAllAlertDialog.setPositiveButton("OK") { dialogInterface, i ->
-                    //clear all the entries
-                    //notify the adapter to delete all items
-                    mListAdapter.removeAllItems()
-                    //also clear all items in the database
-                    Utils.dataHelper.clearAllItem()
-                }
-                removeAllAlertDialog.setNegativeButton("Cancel") { dialog, which ->
-                    dialog.dismiss()
-                }
-                removeAllAlertDialog.show()
-                return true
-            }
-            R.id.action_filter -> {
-                //change the icon by whether the filter is apply or not
-                isFilter = !isFilter
-                if (!isFilter) {
-                    item.setIcon(R.drawable.uncheck)
-                } else {
-                    item.setIcon(R.drawable.check)
-                }
-                //notify the adapter to filter the data
-                mListAdapter.filterData(true)
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun handleMessage(msg: Message): Boolean {
@@ -171,7 +117,26 @@ class ToDoListFragment : AbstractToDoFragment(), AdapterCallback {
             Utils.dataHelper.createOrUpdateListItem(newListItemTable)
             mListAdapter.addNewListItem(newListItemTable)
         }
-        alertDialog.show()
+
+        val dialog = alertDialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = input.length() > 0
+
+            }
+        })
     }
 
     companion object {

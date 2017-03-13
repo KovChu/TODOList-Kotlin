@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Message
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.widget.EditText
 import android.widget.LinearLayout
@@ -29,6 +31,12 @@ class ToDoDetailFragment(listItem : ListItemTable) : AbstractToDoFragment(), Ada
     private var isFilter = false
 
     private var mListItem = listItem
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //notify the system that the fragment contains option menu
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                      savedInstanceState: Bundle?): View {
@@ -88,11 +96,20 @@ class ToDoDetailFragment(listItem : ListItemTable) : AbstractToDoFragment(), Ada
                 return true
             }
             R.id.action_remove_all -> {
-                //notify the adapter to delete all items
-                mItemAdapter.removeAllItems()
-                //also clear all items in the database
-                Utils.dataHelper.clearAllItem()
-                displayHint()
+                val removeAllAlertDialog = AlertDialog.Builder(activity)
+                removeAllAlertDialog.setTitle(getString(R.string.add_new_list_title))
+                removeAllAlertDialog.setMessage(getString(R.string.add_new_list_description))
+                removeAllAlertDialog.setPositiveButton("OK") { dialogInterface, i ->
+                    //clear all the entries
+                    //notify the adapter to delete all items
+                    mItemAdapter.removeAllItems()
+                    //also clear all items in the database
+                    Utils.dataHelper.clearAllDetailItem()
+                }
+                removeAllAlertDialog.setNegativeButton("Cancel") { dialog, which ->
+                    dialog.dismiss()
+                }
+                removeAllAlertDialog.show()
                 return true
             }
             R.id.action_filter -> {
@@ -123,7 +140,7 @@ class ToDoDetailFragment(listItem : ListItemTable) : AbstractToDoFragment(), Ada
      * called when FAB has been clicked
      */
     override fun onFabClicked() {
-        val alertDialog = AlertDialog.Builder(getActivity())
+        val alertDialog = AlertDialog.Builder(activity)
         alertDialog.setTitle(getString(R.string.add_new_item_title))
         alertDialog.setMessage(getString(R.string.add_new_item_description))
         val input = EditText(activity)
@@ -139,7 +156,27 @@ class ToDoDetailFragment(listItem : ListItemTable) : AbstractToDoFragment(), Ada
             newDetailItemTable.title = input.text.toString()
             Utils.dataHelper.createOrUpdateDetailItem(newDetailItemTable)
         }
-        alertDialog.show()
+
+        val dialog = alertDialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
+
+        input.addTextChangedListener(object : TextWatcher {
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = input.length() > 0
+
+            }
+        })
+
     }
     override fun onListItemClicked(item: ListItemTable) {
         //do not need to implement

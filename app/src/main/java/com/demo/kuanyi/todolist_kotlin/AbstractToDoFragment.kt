@@ -14,21 +14,10 @@ abstract class AbstractToDoFragment : Fragment(), Handler.Callback, OnFabClickCa
 
     lateinit var mHandler: Handler
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //notify the system that the fragment contains option menu
-        setHasOptionsMenu(true)
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         //create a Handler runs on UI thread for making changes with UI
         mHandler = Handler(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as MainActivity).setOnFabCallback(this)
     }
 
 }

@@ -28,6 +28,9 @@ class DataHelper(context: Context) {
 
     }
 
+    /**
+     * get the title of the selected list
+     */
     fun getListTitleById(listId: String): String {
         try {
             val itemTable = mDBHelper.listItemTable?.queryForEq("id", listId)?.get(0)
@@ -86,6 +89,9 @@ class DataHelper(context: Context) {
 
     }
 
+    /**
+     * remove all items from list detail
+     */
     fun clearAllDetailItem() {
         mDBHelper.clearDetailItemTable()
     }
@@ -95,7 +101,7 @@ class DataHelper(context: Context) {
      */
     fun clearAllItem() {
         mDBHelper.clearListItemTable()
-        mDBHelper.clearDetailItemTable()
+        clearAllDetailItem()
     }
 
 
